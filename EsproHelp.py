@@ -19,7 +19,7 @@ app = Client(
 )
 
 
-@bot.on_message(filters.command("start") & filters.private)
+@app.on_message(filters.command("start") & filters.private)
 async def start_(client: Client, message: Message):
     await message.reply_photo(
         photo=f"{BOT_IMAGE}",
@@ -48,7 +48,7 @@ async def start_(client: Client, message: Message):
     )
     
     
-@bot.on_message(filters.command(["start"]) & filters.group)
+@app.on_message(filters.command(["start"]) & filters.group)
 async def start(client: Client, message: Message):
     await message.reply_photo(
         photo=f"{BOT_IMAGE}",
