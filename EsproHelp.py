@@ -2,6 +2,7 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 from pyrogram.types import ChatPermissions
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
+import os
 import re
 
 API_ID = os.environ.get("API_ID", "none") 
