@@ -1,6 +1,7 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from pyrogram.types import ChatPermissions
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 import re
 
 API_ID = os.environ.get("API_ID", "none") 
@@ -16,6 +17,19 @@ app = Client(
     bot_token = BOT_TOKEN
 )
 
+
+@app.on_message(filters.command("start"))
+async def start_command(client: Client, message: Message):
+    await message.reply_photo(
+        photo="https://example.com/image.jpg",  # Replace with your image URL or local file
+        caption="I am",
+        reply_markup=InlineKeyboardMarkup(
+            [
+                [InlineKeyboardButton("Visit Channel", url="https://t.me/YourChannel")],
+                [InlineKeyboardButton("Help", callback_data="help_callback")]
+            ]
+        )
+    )
 
 # Link detection regex (detects http, https, t.me, www)
 LINK_REGEX = re.compile(r"(https?://|www\.|t\.me/|telegram\.me/)", re.IGNORECASE)
