@@ -1,7 +1,7 @@
 {
   "name": "Espro Help",
   "description": "A Telegram Best Artificial Intelligence Chat Bot, written in Python with Pyrogram",
-  "logo": "https://i.imgur.com/your-logo.png",  // Optional: Replace with a valid logo URL or remove this line
+  "logo": "https://i.imgur.com/your-logo.png",
   "stack": "container",
   "env": {
     "BOT_TOKEN": {
