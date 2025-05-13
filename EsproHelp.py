@@ -73,59 +73,18 @@ async def delete_join_message(client: Client, message: Message):
 async def delete_left_message(client: Client, message: Message):
     await message.delete()
 
-# Only group admins can use these commands
-def admin_filter():
-    return filters.group & filters.user(lambda _, __, msg: msg.from_user and msg.chat.get_member(msg.from_user.id).status in ["administrator", "creator"])
+from pyrogram import Client, filters
+from pyrogram.types import Message
 
-@app.on_message(filters.command("admin") & admin_filter())
-async def promote_user(client, message):
-    if not message.reply_to_message:
-        return await message.reply("Kisi member ko reply karke /admin likho.")
-    user_id = message.reply_to_message.from_user.id
-    await client.promote_chat_member(
-        chat_id=message.chat.id,
-        user_id=user_id,
-        can_change_info=True,
-        can_delete_messages=True,
-        can_invite_users=True,
-        can_restrict_members=True,
-        can_pin_messages=True,
-        can_promote_members=False
-    )
-    await message.reply(f"User [{user_id}](tg://user?id={user_id}) ab admin ban gaya.")
 
-@app.on_message(filters.command("unadmin") & admin_filter())
-async def demote_user(client, message):
-    if not message.reply_to_message:
-        return await message.reply("Kisi member ko reply karke /unadmin likho.")
-    user_id = message.reply_to_message.from_user.id
-    await client.promote_chat_member(
-        chat_id=message.chat.id,
-        user_id=user_id,
-        can_change_info=False,
-        can_delete_messages=False,
-        can_invite_users=False,
-        can_restrict_members=False,
-        can_pin_messages=False,
-        can_promote_members=False
-    )
-    await message.reply(f"User [{user_id}](tg://user?id={user_id}) se admin rights hata diye gaye.")
-
-@app.on_message(filters.command("ban") & admin_filter())
-async def ban_user(client, message):
-    if not message.reply_to_message:
-        return await message.reply("Kisi member ko reply karke /ban likho.")
-    user_id = message.reply_to_message.from_user.id
-    await client.ban_chat_member(message.chat.id, user_id)
-    await message.reply(f"User [{user_id}](tg://user?id={user_id}) ko ban kar diya gaya.")
-
-@app.on_message(filters.command("unban") & admin_filter())
-async def unban_user(client, message):
-    if not message.reply_to_message:
-        return await message.reply("Kisi member ko reply karke /unban likho.")
-    user_id = message.reply_to_message.from_user.id
-    await client.unban_chat_member(message.chat.id, user_id)
-    await message.reply(f"User [{user_id}](tg://user?id={user_id}) ko unban kar diya gaya.")
+# Filter to catch only forwarded messages
+@app.on_message(filters.forwarded & filters.group)
+async def delete_forwarded_messages(client: Client, message: Message):
+    try:
+        await message.delete()
+        print(f"Deleted forwarded message from {message.from_user.first_name}")
+    except Exception as e:
+        print(f"Failed to delete message: {e}")
 
 print("Bot ⭐")
 app.run()
