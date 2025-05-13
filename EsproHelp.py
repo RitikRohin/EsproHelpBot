@@ -21,6 +21,9 @@ app = Client(
 )
 
 
+# Regex to detect ANY kind of link
+link_pattern = re.compile(r"(https?://|www\.|t\.me/|telegram\.me/|@\w+|\.com|\.net|\.org|\.in|\.xyz)")
+
 @app.on_message(filters.command("start") & filters.private)
 async def start_(client: Client, message: Message):
     await message.reply_photo(
@@ -40,28 +43,17 @@ async def start_(client: Client, message: Message):
     
 
 
-# Link detection regex (detects http, https, t.me, www)
-LINK_REGEX = re.compile(r"(https?://|www\.|t\.me/|telegram\.me/)", re.IGNORECASE)
-
 @app.on_message(filters.group & filters.text)
-async def delete_links_from_members(client, message):
-    # Skip if no sender
-    if not message.from_user:
-        return
+async def delete_links(client, message):
+    if link_pattern.search(message.text):
+        if not message.from_user or message.from_user.is_bot:
+            return
+        try:
+            await message.delete()
+            print(f"Deleted message with link from {message.from_user.first_name}")
+        except Exception as e:
+            print(f"Error deleting message: {e}")
 
-    # If link is found in message
-    if LINK_REGEX.search(message.text):
-        # Get list of admins in this chat
-        admins = await client.get_chat_members(message.chat.id, filter="administrators")
-        admin_ids = [admin.user.id for admin in admins]
-
-        # If sender is NOT admin, delete the message
-        if message.from_user.id not in admin_ids:
-            try:
-                await message.delete()
-                print(f"Deleted link from {message.from_user.first_name}")
-            except Exception as e:
-                print(f"Error deleting message: {e}")
 
 # Delete "user joined" messages
 @app.on_message(filters.new_chat_members)
