@@ -33,7 +33,7 @@ async def start_(client: Client, message: Message):
 @app.on_callback_query()
 async def button_click(client: Client, callback_query: CallbackQuery):
     if callback_query.data == "future":
-        await callback_query.answer("Future is coming soon!", show_alert=True)
+        await callback_query.answer("command is coming soon!", show_alert=True)
 
 @app.on_message(filters.group & filters.text)
 async def delete_links(client: Client, message: Message):
