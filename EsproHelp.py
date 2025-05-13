@@ -6,7 +6,7 @@ import re
 API_ID = int(os.environ.get("API_ID", 12345))  # Replace 12345 with your real API_ID
 API_HASH = os.environ.get("API_HASH", "your_api_hash")
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "your_bot_token")
-BOT_IMAGE = os.environ.get("BOT_IMAGE", ""https://ibb.co/8npYwYvg")  # Must be direct image URL
+BOT_IMAGE = os.environ.get("BOT_IMAGE", "https://ibb.co/8npYwYvg")  # Must be direct image URL
 
 app = Client(
     "EsproHelp",
