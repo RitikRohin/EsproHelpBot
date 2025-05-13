@@ -6,7 +6,7 @@ import re
 API_ID = int(os.environ.get("API_ID", 12345))  # Replace 12345 with your real API_ID
 API_HASH = os.environ.get("API_HASH", "your_api_hash")
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "your_bot_token")
-BOT_IMAGE = os.environ.get("BOT_IMAGE", "https://i.ibb.co/8npYwYv/help.jpg")  # Must be direct image URL
+BOT_IMAGE = os.environ.get("BOT_IMAGE", ""https://ibb.co/8npYwYvg")  # Must be direct image URL
 
 app = Client(
     "EsproHelp",
@@ -22,16 +22,7 @@ link_pattern = re.compile(r"(https?://|www\.|t\.me/|telegram\.me/|@\w+|\.com|\.n
 async def start_(client: Client, message: Message):
     await message.reply_photo(
         photo=BOT_IMAGE,
-        caption="""
-┏────────────────────┓
-┃✦ ᴛʜɪs ɪs ʜᴇʟᴘ ʙσᴛ ✔️
-┃✦ ηᴏ ʟᴧɢ | ηᴏ ᴀᴅs | ηᴏ ᴘʀσϻᴏ ⚡️
-┣─────⟨𝐄𝗌ρ𝗋ⱺ ✘ 𝐇ᴇʟᴘ⟩─────┫
-┃✦ ғᴧsᴛ ʀєᴘʟʏ & ηᴏ ᴅσᴡηᴛɪϻє ❤️
-┃✦ ʀєᴘʟʏ ɪη ɢʀσᴜᴘs & ᴘʀɪᴠᴧᴛє 🦋
-┗────────────────────┛
-<b>๏ Click the Help button to get info about modules & commands.</b>
-""",
+        caption=f"""\n\n┏────────────────────┓\n┃✦ ᴛʜɪs ɪs ʜᴇʟᴘ ʙσᴛ ✔️\n┃✦ ηᴏ ʟᴧɢ | ηᴏ ᴀᴅs | ηᴏ ᴘʀσϻᴏ ⚡️\n┣─────⟨𝐄𝗌ρ𝗋ⱺ ✘ 𝐇ᴇʟᴘ⟩─────┫\n┃✦ ғᴧsᴛ ʀєᴘʟʏ & ηᴏ ᴅσᴡηᴛɪϻє. ❤️ \n┃✦ ʀєᴘʟʏ ɪη ɢʀσᴜᴘs & ᴘʀɪᴠᴧᴛє. 🦋 \n┗────────────────────┛\n<b>๏ ᴄʟɪᴄᴋ ᴏɴ ᴛʜᴇ ʜᴇʟᴩ ʙᴜᴛᴛᴏɴ ᴛᴏ ɢᴇᴛ ɪɴғᴏʀᴍᴀᴛɪᴏɴ ᴀʙᴏᴜᴛ ᴍʏ ᴍᴏᴅᴜʟᴇs ᴀɴᴅ ᴄᴏᴍᴍᴀɴᴅs.</b>""",
         reply_markup=InlineKeyboardMarkup([
             [InlineKeyboardButton("🔎 How To Use? Command Menu", callback_data="future")],
             [InlineKeyboardButton("✚ Add Me To Your Group ✚", url="https://t.me/EsproHelpBot?startgroup=true")],
