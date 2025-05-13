@@ -17,6 +17,10 @@ app = Client(
 
 # Regex to detect links
 link_pattern = re.compile(r"(https?://|www\.|t\.me/|telegram\.me/|@\w+|\.com|\.net|\.org|\.in|\.xyz)")
+adult_keywords = [
+    "sex", "porn", "xxx", "nude", "nsfw", "blowjob", "boobs", "pussy", "cock", "milf", "hentai",
+    "naked", "anal", "onlyfans", "cum", "suck", "fap", "bhabhi", "desi sex"
+]
 
 @app.on_message(filters.command("start") & filters.private)
 async def start_(client: Client, message: Message):
@@ -61,5 +65,52 @@ async def delete_forwarded_messages(client: Client, message: Message):
     except Exception as e:
         print(f"Failed to delete forwarded message: {e}")
 
+
+
+# Check function
+def contains_adult_content(text: str) -> bool:
+    if not text:
+        return False
+    text = text.lower()
+    return any(re.search(rf"\b{word}\b", text) for word in adult_keywords)
+
+# Main handler for all message types
+@app.on_message(filters.group)
+async def check_all_messages(client, message):
+    content = ""
+
+    # Text messages
+    if message.text:
+        content = message.text
+
+    # Captions for media (video, photo, doc, gif, etc.)
+    elif message.caption:
+        content = message.caption
+
+    # File name of document, video, etc.
+    elif message.document:
+        content = message.document.file_name or ""
+
+    elif message.video:
+        content = message.video.file_name or ""
+
+    elif message.audio:
+        content = message.audio.file_name or ""
+
+    elif message.voice:
+        content = "voice message"
+
+    elif message.sticker:
+        content = message.sticker.emoji or "sticker"
+
+    # Detect adult content and delete
+    if contains_adult_content(content):
+        await message.delete()
+        try:
+            await message.chat.send_message("⚠️ 18+ content is not allowed, message deleted.")
+        except:
+            pass  # ignore if bot can't send message
+
+ 
 print("Bot ⭐ Running...")
 app.run()
