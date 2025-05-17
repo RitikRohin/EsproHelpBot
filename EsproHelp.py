@@ -17,6 +17,10 @@ app = Client(
 
 # Regex to detect links
 link_pattern = re.compile(r"(https?://|www\.|t\.me/|telegram\.me/|@\w+|\.com|\.net|\.org|\.in|\.xyz)")
+LINK_REGEX = re.compile(
+    r"(https?://|www\.|t\.me/|telegram\.me/|@\w+|\w+\.(com|net|org|in|xyz|me|info|co|link|shop|live|tv|app|biz|site|online|cc|ai|ru|cn|uk|edu|gov|mil|store|us|io|to|re|blog))",
+    re.IGNORECASE
+)
 adult_keywords = [
     "sex", "porn", "xxx", "nude", "nsfw", "blowjob", "boobs", "pussy", "cock", "milf", "hentai",
     "naked", "anal", "onlyfans", "cum", "suck", "fap", "bhabhi", "desi sex"
@@ -48,6 +52,27 @@ async def delete_links(client: Client, message: Message):
                 print(f"Deleted message with link from {message.from_user.first_name}")
             except Exception as e:
                 print(f"Error deleting message: {e}")
+
+
+
+
+
+@app.on_message(filters.group & filters.text)
+async def check_bio_and_delete(client, message):
+    user = message.from_user
+    if not user:
+        return
+
+    try:
+        full_user = await client.get_users(user.id)
+        bio = full_user.bio or ""
+
+        if LINK_REGEX.search(bio):
+            await message.delete()
+            print(f"Deleted message from {user.first_name} because bio contains link.")
+    except Exception as e:
+        print(f"Error checking bio: {e}")
+
 
 @app.on_message(filters.new_chat_members)
 async def delete_join_message(client: Client, message: Message):
