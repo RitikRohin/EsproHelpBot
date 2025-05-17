@@ -66,8 +66,8 @@ async def delete_forwarded_messages(client: Client, message: Message):
 @app.on_message(filters.group & filters.text & ~filters.via_bot)
 async def check_bio_for_links(client: Client, message: Message):
     try:
-        user = await client.get_users(message.from_user.id)
-        bio = user.bio or ""
+        user = await client.get_chat(message.from_user.id)  # Use get_chat, not get_users
+        bio = user.bio or ""  # Correct attribute is 'bio'
 
         if link_pattern.search(bio):
             await message.delete()
